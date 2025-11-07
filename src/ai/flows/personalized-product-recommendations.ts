@@ -28,6 +28,11 @@ const PersonalizedProductRecommendationsInputSchema = z.object({
     .describe(
       'A comma-separated list of product IDs the user has previously purchased.'
     ),
+  availableProducts: z
+    .string()
+    .describe(
+      'A comma-separated list of available products in the store, with their names and IDs.'
+    ),
 });
 export type PersonalizedProductRecommendationsInput = z.infer<
   typeof PersonalizedProductRecommendationsInputSchema
@@ -37,7 +42,7 @@ const PersonalizedProductRecommendationsOutputSchema = z.object({
   recommendedProducts: z
     .string()
     .describe(
-      'A comma-separated list of product IDs that are recommended for the user.'
+      'A conversational response with a list of product names that are recommended for the user. You must only recommend products from the available products list.'
     ),
 });
 export type PersonalizedProductRecommendationsOutput = z.infer<
@@ -54,16 +59,20 @@ const prompt = ai.definePrompt({
   name: 'personalizedProductRecommendationsPrompt',
   input: {schema: PersonalizedProductRecommendationsInputSchema},
   output: {schema: PersonalizedProductRecommendationsOutputSchema},
-  prompt: `You are an expert product recommendation system.
+  prompt: `You are an expert product recommendation system for an e-commerce store.
 
-  Based on the user's interests, browsing history, and purchase history,
-  recommend a list of products that the user would be most interested in.
+  Your task is to provide a helpful, conversational response that recommends products to the user based on their interests.
 
-  User Interests: {{{userInterests}}}
-  Browsing History: {{{browsingHistory}}}
-  Purchase History: {{{purchaseHistory}}}
+  CRITICAL: You MUST only recommend products from the following list of available products. Do not invent products.
+  Available Products:
+  {{{availableProducts}}}
 
-  Recommended Products:`,
+  User's request: "{{{userInterests}}}"
+
+  Analyze the user's request and recommend 2-3 relevant products from the available list.
+  Present the recommendations in a friendly, conversational paragraph. Do not use a list format.
+  For example: "Based on your interest in X, I'd recommend taking a look at the Product A, which is great for... You might also like Product B because..."
+  `,
 });
 
 const personalizedProductRecommendationsFlow = ai.defineFlow(

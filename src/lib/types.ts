@@ -6,4 +6,6 @@ export type Product = {
   category: string;
   imageUrl?: string;
   imageHint?: string;
+  shippingCost?: number;
+  gstRate?: number;
 };

@@ -5,9 +5,10 @@ import type { Product } from "@/lib/types";
 import { doc } from "firebase/firestore";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Heart, Share2, ShoppingCart } from "lucide-react";
+import { Heart, Share2, ShoppingCart, Truck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { notFound } from "next/navigation";
+import { Separator } from "@/components/ui/separator";
 
 function ProductDetailSkeleton() {
     return (
@@ -48,6 +49,9 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
     notFound();
   }
   
+  const gstAmount = product.price * ((product.gstRate || 0) / 100);
+  const totalAmount = product.price + gstAmount + (product.shippingCost || 0);
+
   return (
     <div className="grid md:grid-cols-2 gap-8 lg:gap-16">
       <div className="aspect-square rounded-lg overflow-hidden border bg-card">
@@ -61,13 +65,43 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
         />
       </div>
       
-      <div className="flex flex-col justify-center py-8">
+      <div className="flex flex-col justify-center py-4">
         <Badge variant="secondary" className="w-fit">{product.category}</Badge>
         <h1 className="text-3xl md:text-4xl font-bold font-headline mt-4">{product.name}</h1>
-        <p className="text-3xl font-bold text-primary mt-4">₹{product.price.toFixed(2)}</p>
         
         <div className="mt-6 prose-sm sm:prose text-muted-foreground max-w-none">
           <p>{product.description}</p>
+        </div>
+
+        <Separator className="my-6" />
+
+        <div className="space-y-3">
+            <div className="flex justify-between items-center">
+                <span className="text-muted-foreground">Price</span>
+                <span className="font-medium">₹{product.price.toFixed(2)}</span>
+            </div>
+            {product.gstRate && gstAmount > 0 && (
+                 <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">GST ({product.gstRate}%)</span>
+                    <span className="font-medium">₹{gstAmount.toFixed(2)}</span>
+                </div>
+            )}
+            {product.shippingCost && product.shippingCost > 0 && (
+                <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Shipping</span>
+                    <span className="font-medium">₹{product.shippingCost.toFixed(2)}</span>
+                </div>
+            )}
+             {product.shippingCost === 0 && (
+                <div className="flex justify-between items-center text-green-600">
+                    <span className="text-sm flex items-center gap-2"><Truck className="h-4 w-4"/> Yay! Free Shipping!</span>
+                </div>
+            )}
+            <Separator />
+            <div className="flex justify-between items-center text-xl font-bold">
+                <span>Total</span>
+                <span>₹{totalAmount.toFixed(2)}</span>
+            </div>
         </div>
         
         <div className="mt-8 flex items-center gap-4">

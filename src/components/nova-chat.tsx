@@ -9,6 +9,9 @@ import { Avatar, AvatarFallback } from "./ui/avatar";
 import { ScrollArea } from "./ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { getPersonalizedProductRecommendations } from "@/ai/flows/personalized-product-recommendations";
+import { useCollection, useFirestore, useMemoFirebase } from "@/firebase";
+import { collection, query } from "firebase/firestore";
+import type { Product } from "@/lib/types";
 
 type Message = {
   sender: "bot" | "user";
@@ -27,6 +30,14 @@ export function NovaChat() {
   const [input, setInput] = useState("");
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
+  const firestore = useFirestore();
+  const productsQuery = useMemoFirebase(() => {
+    if (!firestore) return null;
+    return query(collection(firestore, "products"));
+  }, [firestore]);
+  const { data: products } = useCollection<Product>(productsQuery);
+
+
   useEffect(() => {
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTo({
@@ -37,7 +48,7 @@ export function NovaChat() {
   }, [messages]);
 
   const handleSend = async () => {
-    if (input.trim() === "") return;
+    if (input.trim() === "" || !products) return;
 
     const newMessages: Message[] = [...messages, { sender: "user", text: input }];
     setMessages(newMessages);
@@ -46,13 +57,16 @@ export function NovaChat() {
     setIsBotLoading(true);
 
     try {
+      const productList = products.map(p => `${p.name} (ID: ${p.id})`).join(', ');
+
       const recommendations = await getPersonalizedProductRecommendations({
         userInterests: userInput,
         browsingHistory: '',
-        purchaseHistory: ''
+        purchaseHistory: '',
+        availableProducts: productList,
       });
       
-      const botResponse = `Based on your interest in "${userInput}", here are some recommendations: ${recommendations.recommendedProducts}`;
+      const botResponse = recommendations.recommendedProducts;
       
       setMessages((prev) => [
         ...prev,
@@ -145,9 +159,9 @@ export function NovaChat() {
                   placeholder="Ask for recommendations..."
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  disabled={isBotLoading}
+                  disabled={isBotLoading || !products}
                 />
-                <Button type="submit" size="icon" disabled={!input.trim() || isBotLoading}>
+                <Button type="submit" size="icon" disabled={!input.trim() || isBotLoading || !products}>
                   <Send className="h-5 w-5" />
                 </Button>
               </form>
