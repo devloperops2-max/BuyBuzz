@@ -99,5 +99,16 @@ export const products: Product[] = [
     "imageHint": "book cover",
     "shippingCost": 40,
     "gstRate": 0
+  },
+  {
+    "id": "10",
+    "name": "Yoga Mat",
+    "description": "A premium, non-slip yoga mat that provides excellent cushioning and support for your practice.",
+    "price": 1599,
+    "category": "Sports & Fitness",
+    "imageUrl": "https://images.unsplash.com/photo-1591291621216-9dff4308588e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx5b2dhJTIwbWF0fGVufDB8fHx8MTc2MzU5OTMwNnww&ixlib=rb-4.1.0&q=80&w=1080",
+    "imageHint": "yoga mat",
+    "shippingCost": 80,
+    "gstRate": 12
   }
 ];
