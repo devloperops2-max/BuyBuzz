@@ -38,3 +38,13 @@ export type Order = {
   orderStatus: string;
   items: OrderItem[]; // For simplicity, embedding items. A subcollection is also a good pattern.
 };
+
+export type User = {
+    id: string;
+    email: string | null;
+    firstName: string;
+    lastName: string;
+    interests: string[];
+    createdAt: any; // Firestore Timestamp
+    photoURL?: string;
+}

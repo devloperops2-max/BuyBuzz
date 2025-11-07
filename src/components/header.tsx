@@ -28,6 +28,8 @@ const navLinks = [
   { href: '/orders', label: 'My Orders' },
 ];
 
+const ADMIN_EMAIL = 'Admin@BuyBuzz';
+
 function SearchForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -85,6 +87,8 @@ export function Header() {
     const last = lastName ? lastName[0] : '';
     return `${first}${last}`.toUpperCase();
   };
+
+  const isAdmin = user && user.email === ADMIN_EMAIL;
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
@@ -158,12 +162,14 @@ export function Header() {
                   <User className="mr-2 h-4 w-4" />
                   <span>Profile</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/admin">
-                    <LayoutDashboard className="mr-2 h-4 w-4" />
-                    <span>Admin</span>
-                  </Link>
-                </DropdownMenuItem>
+                {isAdmin && (
+                  <DropdownMenuItem asChild>
+                    <Link href="/admin">
+                      <LayoutDashboard className="mr-2 h-4 w-4" />
+                      <span>Admin</span>
+                    </Link>
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />

@@ -18,6 +18,8 @@ type Message = {
   text: string;
 }
 
+const GREETING_DELAY = 30000; // 30 seconds
+
 export function NovaChat() {
   const [isOpen, setIsOpen] = useState(false);
   const [isBotLoading, setIsBotLoading] = useState(false);
@@ -37,6 +39,15 @@ export function NovaChat() {
   }, [firestore]);
   const { data: products } = useCollection<Product>(productsQuery);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!isOpen) {
+        setIsOpen(true);
+      }
+    }, GREETING_DELAY);
+
+    return () => clearTimeout(timer);
+  }, [isOpen]);
 
   useEffect(() => {
     if (scrollAreaRef.current) {

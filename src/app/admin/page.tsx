@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Card,
   CardContent,
@@ -6,6 +8,17 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { DollarSign, Package, Users, Activity } from "lucide-react";
+import { Line, LineChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { ChartTooltipContent } from '@/components/ui/chart';
+
+const chartData = [
+  { month: 'Jan', revenue: 4000, profit: 2400 },
+  { month: 'Feb', revenue: 3000, profit: 1398 },
+  { month: 'Mar', revenue: 5000, profit: 3800 },
+  { month: 'Apr', revenue: 2780, profit: 1908 },
+  { month: 'May', revenue: 1890, profit: 800 },
+  { month: 'Jun', revenue: 2390, profit: 1500 },
+];
 
 export default function AdminDashboard() {
   return (
@@ -53,7 +66,25 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
       </div>
-      <div className="mt-6">
+      <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Revenue vs. Profit</CardTitle>
+            <CardDescription>Last 6 months performance.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis />
+                <Tooltip content={<ChartTooltipContent />} />
+                <Line type="monotone" dataKey="revenue" stroke="hsl(var(--primary))" strokeWidth={2} name="Revenue"/>
+                <Line type="monotone" dataKey="profit" stroke="hsl(var(--chart-2))" strokeWidth={2} name="Profit"/>
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
         <Card>
           <CardHeader>
             <CardTitle>Recent Orders</CardTitle>

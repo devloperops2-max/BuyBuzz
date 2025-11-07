@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useAuth, useUser, useFirestore } from '@/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { setDoc, doc } from 'firebase/firestore';
+import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect, useState } from 'react';
 import type { FirebaseError } from 'firebase/app';
@@ -79,6 +79,7 @@ export function SignupForm() {
         firstName,
         lastName,
         interests,
+        createdAt: serverTimestamp(),
       };
 
       // 3. Save the user profile to Firestore
