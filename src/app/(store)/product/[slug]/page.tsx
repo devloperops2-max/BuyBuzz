@@ -61,7 +61,8 @@ export default function ProductDetailPage() {
   }
   
   const gstAmount = product.price * ((product.gstRate || 0) / 100);
-  const totalAmount = product.price + gstAmount + (product.shippingCost || 0);
+  const shippingCost = product.price > 499 ? 0 : (product.shippingCost || 0);
+  const totalAmount = product.price + gstAmount + shippingCost;
 
   return (
     <div className="grid md:grid-cols-2 gap-8 lg:gap-16">
@@ -97,13 +98,13 @@ export default function ProductDetailPage() {
                     <span className="font-medium">₹{gstAmount.toFixed(2)}</span>
                 </div>
             )}
-            {product.shippingCost && product.shippingCost > 0 && (
+            {shippingCost > 0 && (
                 <div className="flex justify-between items-center">
                     <span className="text-muted-foreground">Shipping</span>
-                    <span className="font-medium">₹{product.shippingCost.toFixed(2)}</span>
+                    <span className="font-medium">₹{shippingCost.toFixed(2)}</span>
                 </div>
             )}
-             {product.shippingCost === 0 && (
+             {shippingCost === 0 && (
                 <div className="flex justify-between items-center text-green-600">
                     <span className="text-sm flex items-center gap-2"><Truck className="h-4 w-4"/> Yay! Free Shipping!</span>
                 </div>
