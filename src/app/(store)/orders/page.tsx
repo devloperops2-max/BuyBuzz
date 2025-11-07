@@ -100,7 +100,7 @@ export default function UserOrdersPage() {
                                 {order.items.map(item => (
                                     <div key={item.id} className="flex items-center gap-4">
                                         <Image 
-                                            src={item.imageUrl || 'https://picsum.photos/seed/placeholder/100/100'} 
+                                            src={(item.imageUrl || 'https://picsum.photos/seed/placeholder/100/100').trimEnd()} 
                                             alt={item.name} 
                                             width={80} 
                                             height={80} 

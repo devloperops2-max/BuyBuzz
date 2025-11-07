@@ -56,7 +56,7 @@ export default function AdminProductsPage() {
                     alt={product.name}
                     className="aspect-square rounded-md object-cover"
                     height="64"
-                    src={product.imageUrl || "/placeholder.svg"}
+                    src={(product.imageUrl || "/placeholder.svg").trimEnd()}
                     width="64"
                     data-ai-hint={product.imageHint}
                   />
