@@ -75,7 +75,7 @@ export function SignupForm() {
       const userDocRef = doc(firestore, 'users', newUser.uid);
       const userData = {
         id: newUser.uid,
-        email: newUser.email,
+        email: email, // Use email from state, not newUser.email
         firstName,
         lastName,
         interests,
