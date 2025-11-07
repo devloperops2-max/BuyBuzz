@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useCollection, useFirestore, useUser, useMemoFirebase } from '@/firebase';
@@ -10,12 +9,14 @@ import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Image from 'next/image';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { CreditCard } from 'lucide-react';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { useState } from 'react';
+import { CreditCard, Landmark, Wallet } from 'lucide-react';
 
 export default function CheckoutPage() {
     const { user } = useUser();
     const firestore = useFirestore();
+    const [paymentMethod, setPaymentMethod] = useState('card');
 
     const cartRef = useMemoFirebase(() => {
         if (!user || !firestore) return null;
@@ -63,16 +64,50 @@ export default function CheckoutPage() {
                     </Card>
                      <Card>
                         <CardHeader>
-                            <CardTitle>Payment Details</CardTitle>
+                            <CardTitle>Payment Method</CardTitle>
                         </CardHeader>
                         <CardContent>
-                             <Alert>
-                                <CreditCard className="h-4 w-4" />
-                                <AlertTitle>Work in Progress</AlertTitle>
-                                <AlertDescription>
-                                    Payment gateway integration is not yet implemented. This is a placeholder section.
-                                </AlertDescription>
-                            </Alert>
+                            <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <RadioGroupItem value="card" id="card" className="peer sr-only" />
+                                    <Label htmlFor="card" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                                        <CreditCard className="mb-3 h-6 w-6" />
+                                        Card
+                                    </Label>
+                                </div>
+                                 <div>
+                                    <RadioGroupItem value="upi" id="upi" className="peer sr-only" />
+                                    <Label htmlFor="upi" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                                        <Landmark className="mb-3 h-6 w-6" />
+                                        UPI
+                                    </Label>
+                                </div>
+                                 <div>
+                                    <RadioGroupItem value="cod" id="cod" className="peer sr-only" />
+                                    <Label htmlFor="cod" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                                        <Wallet className="mb-3 h-6 w-6" />
+                                        Cash on Delivery
+                                    </Label>
+                                </div>
+                            </RadioGroup>
+                             {paymentMethod === 'card' && (
+                                <div className="mt-6 grid gap-4">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="card-number">Card Number</Label>
+                                        <Input id="card-number" placeholder="0000 0000 0000 0000" />
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="expiry">Expiry</Label>
+                                            <Input id="expiry" placeholder="MM/YY" />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="cvv">CVV</Label>
+                                            <Input id="cvv" placeholder="123" />
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </CardContent>
                     </Card>
                 </div>
