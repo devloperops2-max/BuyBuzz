@@ -19,6 +19,7 @@ const interestsList = [
   'Classic Elegance',
   'Sustainable Living',
   'Tech & Gadgets',
+  'Electronics',
 ];
 
 export function SignupForm() {
