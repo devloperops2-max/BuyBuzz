@@ -1,10 +1,11 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
+import { FirebaseClientProvider } from '@/firebase';
 
 export const metadata: Metadata = {
-  title: 'Lumina',
-  description: 'Illuminate Your Space. Discover curated home goods that blend modern design with timeless elegance.',
+  title: 'BuyBuzz',
+  description: 'Your one-stop shop for everything you need. Discover amazing products and deals on BuyBuzz.',
 };
 
 export default function RootLayout({
@@ -20,7 +21,9 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        {children}
+        <FirebaseClientProvider>
+          {children}
+        </FirebaseClientProvider>
         <Toaster />
       </body>
     </html>

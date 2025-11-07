@@ -1,30 +1,6 @@
 {
   "placeholderImages": [
     {
-      "id": "product-1",
-      "description": "A stylish modern chair",
-      "imageUrl": "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBjaGFpcnxlbnwwfHx8fDE3NjIzOTYxMzJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "modern chair"
-    },
-    {
-      "id": "product-2",
-      "description": "A minimalist desk lamp",
-      "imageUrl": "https://images.unsplash.com/photo-1621447980929-6638614633c8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkZXNrJTIwbGFtcHxlbnwwfHx8fDE3NjI0MjcyMTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "desk lamp"
-    },
-    {
-      "id": "product-3",
-      "description": "A ceramic vase",
-      "imageUrl": "https://images.unsplash.com/photo-1705526966290-2de7b8a33f03?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjZXJhbWljJTIwdmFzZXxlbnwwfHx8fDE3NjI0NTg3MjJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "ceramic vase"
-    },
-    {
-      "id": "product-4",
-      "description": "A set of scented candles",
-      "imageUrl": "https://images.unsplash.com/photo-1572726729207-a78d6feb18d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzY2VudGVkJTIwY2FuZGxlc3xlbnwwfHx8fDE3NjI0MDYxMzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "scented candles"
-    },
-    {
       "id": "hero-1",
       "description": "A beautifully arranged living room",
       "imageUrl": "https://images.unsplash.com/photo-1605774337664-7a846e9cdf17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxsaXZpbmclMjByb29tfGVufDB8fHx8MTc2MjQ2MDM4N3ww&ixlib=rb-4.1.0&q=80&w=1080",
