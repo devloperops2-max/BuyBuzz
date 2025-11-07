@@ -1,14 +1,18 @@
 'use client';
 
-import { useDoc, useFirestore, useMemoFirebase } from "@/firebase";
+import { useDoc, useFirestore, useMemoFirebase, useUser } from "@/firebase";
 import type { Product } from "@/lib/types";
-import { doc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Heart, Share2, ShoppingCart, Truck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useParams } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { errorEmitter } from "@/firebase/error-emitter";
+import { FirestorePermissionError } from "@/firebase/errors";
 
 function ProductDetailSkeleton() {
     return (
@@ -34,6 +38,9 @@ export default function ProductDetailPage() {
   const params = useParams();
   const productId = params.slug as string;
   const firestore = useFirestore();
+  const { user } = useUser();
+  const { toast } = useToast();
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
   
   const productRef = useMemoFirebase(() => {
     if (!firestore || !productId) return null;
@@ -41,6 +48,62 @@ export default function ProductDetailPage() {
   }, [firestore, productId]);
   
   const { data: product, isLoading } = useDoc<Product>(productRef);
+
+  const handleAddToCart = async () => {
+    if (!user || !firestore || !product) {
+        toast({
+            variant: "destructive",
+            title: "Unable to add to cart",
+            description: "You must be logged in to add items to your cart."
+        });
+        return;
+    }
+
+    setIsAddingToCart(true);
+    const cartItemRef = doc(firestore, 'users', user.uid, 'cart', product.id);
+
+    try {
+        const docSnap = await getDoc(cartItemRef);
+        const currentQuantity = docSnap.exists() ? docSnap.data().quantity : 0;
+        
+        const cartItemData = {
+            productId: product.id,
+            quantity: currentQuantity + 1,
+            // Denormalize product data for easier access in the cart
+            name: product.name,
+            price: product.price,
+            imageUrl: product.imageUrl || '',
+            imageHint: product.imageHint || ''
+        };
+
+        setDoc(cartItemRef, cartItemData, { merge: true })
+            .then(() => {
+                 toast({
+                    title: "Added to Cart!",
+                    description: `${product.name} has been added to your cart.`,
+                });
+            })
+            .catch(serverError => {
+                 const permissionError = new FirestorePermissionError({
+                    path: cartItemRef.path,
+                    operation: 'create',
+                    requestResourceData: cartItemData,
+                });
+                errorEmitter.emit('permission-error', permissionError);
+            });
+
+    } catch (error) {
+        console.error("Error adding to cart:", error);
+        toast({
+            variant: "destructive",
+            title: "Something went wrong",
+            description: "Could not add item to cart. Please try again.",
+        });
+    } finally {
+        setIsAddingToCart(false);
+    }
+  };
+
 
   if (isLoading) {
     return <ProductDetailSkeleton />;
@@ -117,9 +180,9 @@ export default function ProductDetailPage() {
         </div>
         
         <div className="mt-8 flex items-center gap-4">
-          <Button size="lg" className="flex-1">
+          <Button size="lg" className="flex-1" onClick={handleAddToCart} disabled={isAddingToCart}>
             <ShoppingCart className="mr-2 h-5 w-5" />
-            Add to Cart
+            {isAddingToCart ? 'Adding...' : 'Add to Cart'}
           </Button>
           <Button variant="outline" size="icon" aria-label="Add to Wishlist">
             <Heart className="h-5 w-5" />

@@ -185,6 +185,36 @@
         "status",
         "timestamp"
       ]
+    },
+    "CartItem": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "CartItem",
+      "type": "object",
+      "description": "Represents an item in a user's shopping cart.",
+      "properties": {
+        "productId": {
+          "type": "string",
+          "description": "Reference to Product."
+        },
+        "quantity": {
+          "type": "number",
+          "description": "Quantity of the product in the cart."
+        },
+        "name": {
+          "type": "string",
+          "description": "Denormalized name of the product."
+        },
+        "price": {
+          "type": "number",
+          "description": "Denormalized price of the product."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "Denormalized URL of the product image.",
+          "format": "uri"
+        }
+      },
+      "required": ["productId", "quantity", "name", "price"]
     }
   },
   "auth": {
@@ -223,6 +253,26 @@
             {
               "name": "productId",
               "description": "The unique identifier for the product."
+            }
+          ]
+        }
+      },
+       {
+        "path": "/users/{userId}/cart/{productId}",
+        "definition": {
+          "entityName": "CartItem",
+          "schema": {
+            "$ref": "#/backend/entities/CartItem"
+          },
+          "description": "Stores shopping cart items for each user. Path-based ownership ensures only the user can access their own cart.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            },
+            {
+              "name": "productId",
+              "description": "The unique identifier for the product in the cart."
             }
           ]
         }

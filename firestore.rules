@@ -70,6 +70,30 @@ service cloud.firestore {
     }
 
     /**
+     * @description Controls access to shopping cart items for each user.
+     * @path /users/{userId}/cart/{productId}
+     * @allow User can manage their own cart items.
+     * @principle Enforces document ownership for the shopping cart.
+     */
+    match /users/{userId}/cart/{productId} {
+       function isOwner(userId) {
+            return request.auth.uid == userId;
+        }
+
+        function isExistingOwner(userId) {
+            return isOwner(userId) && resource != null;
+        }
+
+        allow get: if isOwner(userId);
+        allow list: if isOwner(userId);
+
+        allow create: if isOwner(userId);
+        allow update: if isExistingOwner(userId);
+        allow delete: if isExistingOwner(userId);
+    }
+
+
+    /**
      * @description Controls access to order information for each user.
      * @path /users/{userId}/orders/{orderId}
      * @allow (create, update, get, list) User with ID 'user123' can create/update/get their own orders.

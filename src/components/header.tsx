@@ -15,10 +15,12 @@ import { ShoppingCart, User, LogOut, LayoutDashboard } from 'lucide-react';
 import { Logo } from './logo';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { useUser, useAuth } from '@/firebase';
+import { useUser, useAuth, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
+import type { CartItem } from '@/lib/types';
+import { collection } from 'firebase/firestore';
+import { Badge } from './ui/badge';
 
 const navLinks = [
   { href: '/dashboard', label: 'Dashboard' },
@@ -29,9 +31,20 @@ export function Header() {
   const pathname = usePathname();
   const { user, isUserLoading } = useUser();
   const auth = useAuth();
+  const firestore = useFirestore();
   const router = useRouter();
 
+  const cartRef = useMemoFirebase(() => {
+    if (!user || !firestore) return null;
+    return collection(firestore, 'users', user.uid, 'cart');
+  }, [user, firestore]);
+
+  const { data: cartItems } = useCollection<CartItem>(cartRef);
+
+  const cartItemCount = cartItems?.reduce((acc, item) => acc + item.quantity, 0) || 0;
+
   const handleLogout = async () => {
+    if (!auth) return;
     await signOut(auth);
     router.push('/');
   };
@@ -63,9 +76,16 @@ export function Header() {
           ))}
         </nav>
         <div className="ml-auto flex items-center space-x-4">
-          <Button variant="ghost" size="icon">
-            <ShoppingCart className="h-5 w-5" />
-            <span className="sr-only">Shopping Cart</span>
+          <Button variant="ghost" size="icon" asChild>
+            <Link href="/cart" className="relative">
+                <ShoppingCart className="h-5 w-5" />
+                {cartItemCount > 0 && (
+                    <Badge variant="destructive" className="absolute -top-2 -right-2 h-5 w-5 justify-center rounded-full p-0 text-xs">
+                        {cartItemCount}
+                    </Badge>
+                )}
+                <span className="sr-only">Shopping Cart</span>
+            </Link>
           </Button>
 
           {isUserLoading ? (
