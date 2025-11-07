@@ -29,7 +29,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
       <div className="flex flex-col justify-center py-8">
         <Badge variant="secondary" className="w-fit">{product.category}</Badge>
         <h1 className="text-3xl md:text-4xl font-bold font-headline mt-4">{product.name}</h1>
-        <p className="text-3xl font-bold text-primary mt-4">${product.price.toFixed(2)}</p>
+        <p className="text-3xl font-bold text-primary mt-4">₹{product.price.toFixed(2)}</p>
         
         <div className="mt-6 prose-sm sm:prose text-muted-foreground max-w-none">
           <p>{product.description}</p>

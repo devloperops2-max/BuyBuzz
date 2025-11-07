@@ -20,7 +20,7 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
           <div className="p-4 border-t">
             <h3 className="font-semibold text-lg font-headline">{product.name}</h3>
-            <p className="text-muted-foreground mt-1">${product.price.toFixed(2)}</p>
+            <p className="text-muted-foreground mt-1">₹{product.price.toFixed(2)}</p>
           </div>
         </CardContent>
       </Link>
