@@ -28,7 +28,7 @@ const navLinks = [
   { href: '/orders', label: 'My Orders' },
 ];
 
-const ADMIN_EMAIL = 'Admin@BuyBuzz';
+const ADMIN_EMAIL = 'admin@buybuzz.com';
 
 function SearchForm() {
   const router = useRouter();

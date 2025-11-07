@@ -22,7 +22,7 @@ import { useUser } from "@/firebase";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-const ADMIN_EMAIL = 'Admin@BuyBuzz';
+const ADMIN_EMAIL = 'admin@buybuzz.com';
 
 export default function AdminLayout({
   children,
