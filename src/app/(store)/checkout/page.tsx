@@ -34,7 +34,8 @@ export default function CheckoutPage() {
     const subtotal = cartItems?.reduce((acc, item) => acc + item.price * item.quantity, 0) || 0;
     const gstRate = 0.12; // 12% GST
     const gstAmount = subtotal * gstRate;
-    const total = subtotal + gstAmount;
+    const shippingCost = subtotal > 499 ? 0 : 40;
+    const total = subtotal + gstAmount + shippingCost;
 
     const handlePlaceOrder = async () => {
         if (!user || !firestore || !cartItems || cartItems.length === 0) {
@@ -65,7 +66,7 @@ export default function CheckoutPage() {
                     quantity: item.quantity,
                     itemPrice: item.price,
                     name: item.name,
-                    imageUrl: item.imageUrl || '',
+                    imageUrl: (item.imageUrl || '').trimEnd(),
                 }))
             };
             batch.set(orderRef, newOrder);
@@ -205,7 +206,7 @@ export default function CheckoutPage() {
                            </div>
                            <div className="flex justify-between text-sm">
                                 <span>Shipping</span>
-                                <span>Free</span>
+                                <span>{shippingCost > 0 ? `₹${shippingCost.toFixed(2)}` : 'Free'}</span>
                            </div>
                             <div className="flex justify-between text-sm">
                                 <span>GST (12%)</span>
