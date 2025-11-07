@@ -11,21 +11,52 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, User, LogOut, LayoutDashboard } from 'lucide-react';
+import { ShoppingCart, User, LogOut, LayoutDashboard, Search } from 'lucide-react';
 import { Logo } from './logo';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useUser, useAuth, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { signOut } from 'firebase/auth';
-import { useRouter } from 'next/navigation';
 import type { CartItem } from '@/lib/types';
 import { collection } from 'firebase/firestore';
 import { Badge } from './ui/badge';
+import { Input } from './ui/input';
+import type { FormEvent } from 'react';
 
 const navLinks = [
   { href: '/dashboard', label: 'Dashboard' },
   { href: '/orders', label: 'My Orders' },
 ];
+
+function SearchForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const defaultQuery = searchParams.get('q') || '';
+
+  const handleSearch = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const searchQuery = formData.get('q') as string;
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+    } else {
+      router.push('/dashboard');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSearch} className="relative w-full max-w-xs">
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+      <Input
+        name="q"
+        defaultValue={defaultQuery}
+        placeholder="Search products..."
+        className="pl-9"
+        aria-label="Search"
+      />
+    </form>
+  )
+}
 
 export function Header() {
   const pathname = usePathname();
@@ -57,7 +88,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
-      <div className="container mx-auto flex h-16 items-center px-4 sm:px-6">
+      <div className="container mx-auto flex h-16 items-center gap-4 px-4 sm:px-6">
         <Logo />
         <nav className="ml-10 hidden md:flex items-center space-x-6 text-sm font-medium">
           {navLinks.map(link => (
@@ -75,7 +106,10 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <div className="ml-auto flex items-center space-x-4">
+        <div className="ml-auto flex items-center space-x-2">
+           <div className="hidden md:block">
+            <SearchForm />
+          </div>
           <Button variant="ghost" size="icon" asChild>
             <Link href="/cart" className="relative">
                 <ShoppingCart className="h-5 w-5" />
@@ -144,6 +178,9 @@ export function Header() {
           )}
         </div>
       </div>
+       <div className="container px-4 sm:px-6 pb-3 md:hidden">
+          <SearchForm />
+        </div>
     </header>
   );
 }
