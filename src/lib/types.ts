@@ -19,3 +19,22 @@ export type CartItem = {
     imageUrl?: string;
     imageHint?: string;
 };
+
+export type OrderItem = {
+  id: string;
+  productId: string;
+  quantity: number;
+  itemPrice: number;
+  name: string;
+  imageUrl?: string;
+};
+
+export type Order = {
+  id: string;
+  userId: string;
+  orderDate: any; // Firestore Timestamp
+  totalAmount: number;
+  paymentMethod: string;
+  orderStatus: string;
+  items: OrderItem[]; // For simplicity, embedding items. A subcollection is also a good pattern.
+};

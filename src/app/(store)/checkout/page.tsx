@@ -1,8 +1,8 @@
 'use client';
 
 import { useCollection, useFirestore, useUser, useMemoFirebase } from '@/firebase';
-import type { CartItem } from '@/lib/types';
-import { collection } from 'firebase/firestore';
+import type { CartItem, Order } from '@/lib/types';
+import { collection, writeBatch, doc, serverTimestamp } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -11,12 +11,18 @@ import { Label } from '@/components/ui/label';
 import Image from 'next/image';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useState } from 'react';
-import { CreditCard, Landmark, Wallet } from 'lucide-react';
+import { CreditCard, Landmark, Loader2, Wallet } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 export default function CheckoutPage() {
     const { user } = useUser();
     const firestore = useFirestore();
+    const { toast } = useToast();
+    const router = useRouter();
+
     const [paymentMethod, setPaymentMethod] = useState('card');
+    const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
     const cartRef = useMemoFirebase(() => {
         if (!user || !firestore) return null;
@@ -29,6 +35,69 @@ export default function CheckoutPage() {
     const gstRate = 0.12; // 12% GST
     const gstAmount = subtotal * gstRate;
     const total = subtotal + gstAmount;
+
+    const handlePlaceOrder = async () => {
+        if (!user || !firestore || !cartItems || cartItems.length === 0) {
+            toast({
+                variant: 'destructive',
+                title: 'Error',
+                description: 'Cannot place order. Your cart is empty or you are not logged in.'
+            });
+            return;
+        }
+
+        setIsPlacingOrder(true);
+
+        try {
+            const batch = writeBatch(firestore);
+
+            // 1. Create a new order document
+            const orderRef = doc(collection(firestore, 'users', user.uid, 'orders'));
+            const newOrder: Omit<Order, 'id'> = {
+                userId: user.uid,
+                orderDate: serverTimestamp(),
+                totalAmount: total,
+                paymentMethod: paymentMethod,
+                orderStatus: 'Placed',
+                items: cartItems.map(item => ({
+                    id: item.productId,
+                    productId: item.productId,
+                    quantity: item.quantity,
+                    itemPrice: item.price,
+                    name: item.name,
+                    imageUrl: item.imageUrl || '',
+                }))
+            };
+            batch.set(orderRef, newOrder);
+            
+            // 2. Clear the cart
+            cartItems.forEach(item => {
+                const cartItemRef = doc(firestore, 'users', user.uid, 'cart', item.id);
+                batch.delete(cartItemRef);
+            });
+
+            // 3. Commit the batch
+            await batch.commit();
+
+            toast({
+                title: 'Order Placed Successfully!',
+                description: 'Thank you for your purchase.'
+            });
+
+            // 4. Redirect to the orders page
+            router.push('/orders');
+
+        } catch (error) {
+            console.error("Error placing order: ", error);
+            toast({
+                variant: 'destructive',
+                title: 'Something went wrong',
+                description: 'Could not place your order. Please try again.'
+            });
+        } finally {
+            setIsPlacingOrder(false);
+        }
+    }
 
     if (isLoading) {
         return <div>Loading your order...</div>
@@ -149,7 +218,10 @@ export default function CheckoutPage() {
                            </div>
                         </CardContent>
                         <CardFooter>
-                            <Button size="lg" className="w-full" disabled>Place Order</Button>
+                            <Button size="lg" className="w-full" onClick={handlePlaceOrder} disabled={isPlacingOrder || !cartItems || cartItems.length === 0}>
+                                {isPlacingOrder && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                {isPlacingOrder ? 'Placing Order...' : 'Place Order'}
+                            </Button>
                         </CardFooter>
                     </Card>
                 </div>
