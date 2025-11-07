@@ -139,7 +139,7 @@ export const products: Product[] = [
     "description": "A powerful and stylish smartphone with a stunning display, a versatile camera system, and all-day battery life.",
     "price": 29999,
     "category": "Electronics",
-    "imageUrl": "https://images.unsplash.com/photo-1598327105666-5b8764a59121?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzbWFydHBob25lfGVufDB8fHx8MTc2MjUxMTM0NHww&ixlib=rb-4.1.0&q=80&w=1080",
+    "imageUrl": "https://images.unsplash.com/photo-1598327105666-5b8764a59121?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzbWFydHBob25lfGVufDB8fHx8MTc2MjUxMTM0NHww&ixlibrb-4.1.0&q=80&w=1080",
     "imageHint": "smartphone",
     "shippingCost": 0,
     "gstRate": 18
@@ -150,8 +150,30 @@ export const products: Product[] = [
     "description": "The ultimate smartphone experience, featuring a pro-level camera, the fastest processor, and a breathtaking display.",
     "price": 99999,
     "category": "Electronics",
-    "imageUrl": "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxpcGhvbmV8ZW58MHx8fHwxNzYyNTExMzc3fDA&ixlibrb-4.1.0&q=80&w=1080",
+    "imageUrl": "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxpcGhvbmV8ZW58MHx8fHwxNzYyNTExMzc3fDA&ixlib-rb-4.1.0&q=80&w=1080",
     "imageHint": "premium smartphone",
+    "shippingCost": 0,
+    "gstRate": 18
+  },
+  {
+    "id": "15",
+    "name": "Swiftbook Laptop",
+    "description": "An ultra-thin and lightweight laptop designed for portability and everyday performance. Perfect for students and professionals on the move.",
+    "price": 55000,
+    "category": "Electronics",
+    "imageUrl": "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx0aGluJTIwbGFwdG9wfGVufDB8fHx8MTc2MzkxOTU3N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+    "imageHint": "thin laptop",
+    "shippingCost": 0,
+    "gstRate": 18
+  },
+  {
+    "id": "16",
+    "name": "Vita Smartphone",
+    "description": "A reliable and affordable smartphone with a great camera, long-lasting battery, and a vibrant display.",
+    "price": 18999,
+    "category": "Electronics",
+    "imageUrl": "https://images.unsplash.com/photo-1523206489230-c012c64b2b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzbWFydHBob25lfGVufDB8fHx8MTc2MjUxMTM0NHww&ixlib-rb-4.1.0&q=80&w=1080",
+    "imageHint": "smartphone device",
     "shippingCost": 0,
     "gstRate": 18
   }
