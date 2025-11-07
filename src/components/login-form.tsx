@@ -40,13 +40,20 @@ export function LoginForm() {
     } catch (error: any) {
       const firebaseError = error as FirebaseError;
       console.error('Login Error:', firebaseError);
+      let description = 'An unexpected error occurred. Please try again.';
+      if (
+        firebaseError.code === 'auth/invalid-credential' ||
+        firebaseError.code === 'auth/invalid-login-credentials'
+      ) {
+        description = 'Invalid email or password.';
+      } else if (firebaseError.message) {
+        description = firebaseError.message;
+      }
+      
       toast({
         variant: 'destructive',
         title: 'Login Failed',
-        description:
-          firebaseError.code === 'auth/invalid-credential'
-            ? 'Invalid email or password.'
-            : firebaseError.message || 'An unexpected error occurred.',
+        description: description,
       });
     } finally {
       setIsLoading(false);
