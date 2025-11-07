@@ -1,7 +1,7 @@
 'use client';
 import { ProductCard } from "@/components/product-card";
-import { useCollection, useFirestore, useMemoFirebase, useUser } from "@/firebase";
-import { collection, query, where, documentId } from "firebase/firestore";
+import { useCollection, useDoc, useFirestore, useMemoFirebase, useUser } from "@/firebase";
+import { collection, query, where, documentId, doc } from "firebase/firestore";
 import type { Product } from "@/lib/types";
 import { useEffect, useState } from "react";
 import { getPersonalizedProductRecommendations } from "@/ai/flows/personalized-product-recommendations";
@@ -37,17 +37,16 @@ export default function DashboardPage() {
   }, [firestore]);
   const { data: allProducts, isLoading: areAllProductsLoading } = useCollection<Product>(productsQuery);
 
-  // 2. Fetch user profile
-  const userProfileQuery = useMemoFirebase(() => {
+  // 2. Fetch user profile directly
+  const userProfileRef = useMemoFirebase(() => {
     if (!firestore || !user) return null;
-    return query(collection(firestore, "users"), where("id", "==", user.uid));
+    return doc(firestore, "users", user.uid);
   }, [firestore, user]);
-  const { data: userProfileData, isLoading: isProfileLoading } = useCollection(userProfileQuery);
-  const userProfile = userProfileData?.[0];
+  const { data: userProfile, isLoading: isProfileLoading } = useDoc(userProfileRef);
 
   // 3. Get AI recommendations
   useEffect(() => {
-    if (userProfile && allProducts) {
+    if (userProfile && allProducts && allProducts.length > 0) {
       const getRecs = async () => {
         setIsRecommendationLoading(true);
         try {
