@@ -67,7 +67,9 @@ service cloud.firestore {
       allow get: if true;
       allow list: if true;
 
-      allow create, update, delete: if request.auth != null;
+      // Temporarily allowing all writes for seeding purposes.
+      // This is not secure for production.
+      allow write: if true;
     }
 
     /**
