@@ -10,7 +10,7 @@ import {
   SidebarTrigger,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import { Home, Package, ShoppingCart, Users, LogOut } from "lucide-react";
+import { Home, Package, ShoppingCart, Users, LogOut, Database } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -61,6 +61,14 @@ export default function AdminLayout({
                   <Link href="/admin/users">
                     <Users />
                     <span>Customers</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton href="/admin/seed" tooltip="Seed Database" asChild>
+                  <Link href="/admin/seed">
+                    <Database />
+                    <span>Seed Database</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
