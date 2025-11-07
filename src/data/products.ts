@@ -110,5 +110,49 @@ export const products: Product[] = [
     "imageHint": "yoga mat",
     "shippingCost": 80,
     "gstRate": 12
+  },
+  {
+    "id": "11",
+    "name": "ROG Gaming Laptop",
+    "description": "High-performance gaming laptop with the latest graphics card and a high-refresh-rate display for an immersive gaming experience.",
+    "price": 120000,
+    "category": "Electronics",
+    "imageUrl": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxnYW1pbmclMjBsYXB0b3B8ZW58MHx8fHwxNzYyNTExMjUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+    "imageHint": "gaming laptop",
+    "shippingCost": 0,
+    "gstRate": 18
+  },
+  {
+    "id": "12",
+    "name": "ThinkPad Business Laptop",
+    "description": "A reliable and secure business laptop with a long battery life and a comfortable keyboard, perfect for productivity on the go.",
+    "price": 85000,
+    "category": "Electronics",
+    "imageUrl": "https://images.unsplash.com/photo-1531297484001-80022131f5a1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxsYXB0b3B8ZW58MHx8fHwxNzYyNTExMzA3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+    "imageHint": "business laptop",
+    "shippingCost": 0,
+    "gstRate": 18
+  },
+  {
+    "id": "13",
+    "name": "Nord Smartphone",
+    "description": "A powerful and stylish smartphone with a stunning display, a versatile camera system, and all-day battery life.",
+    "price": 29999,
+    "category": "Electronics",
+    "imageUrl": "https://images.unsplash.com/photo-1598327105666-5b8764a59121?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzbWFydHBob25lfGVufDB8fHx8MTc2MjUxMTM0NHww&ixlib=rb-4.1.0&q=80&w=1080",
+    "imageHint": "smartphone",
+    "shippingCost": 0,
+    "gstRate": 18
+  },
+  {
+    "id": "14",
+    "name": "Pixel Premium Smartphone",
+    "description": "The ultimate smartphone experience, featuring a pro-level camera, the fastest processor, and a breathtaking display.",
+    "price": 99999,
+    "category": "Electronics",
+    "imageUrl": "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxpcGhvbmV8ZW58MHx8fHwxNzYyNTExMzc3fDA&ixlibrb-4.1.0&q=80&w=1080",
+    "imageHint": "premium smartphone",
+    "shippingCost": 0,
+    "gstRate": 18
   }
 ];
