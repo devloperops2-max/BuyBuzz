@@ -40,6 +40,12 @@ const nextConfig: NextConfig = {
         hostname: 'dynamicdistributors.in',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'aalapelectronics.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
