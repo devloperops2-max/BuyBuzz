@@ -7,7 +7,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Heart, Share2, ShoppingCart, Truck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { notFound } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 
 function ProductDetailSkeleton() {
@@ -30,8 +30,9 @@ function ProductDetailSkeleton() {
 }
 
 
-export default function ProductDetailPage({ params }: { params: { slug: string } }) {
-  const productId = params.slug;
+export default function ProductDetailPage() {
+  const params = useParams();
+  const productId = params.slug as string;
   const firestore = useFirestore();
   
   const productRef = useMemoFirebase(() => {
