@@ -10,7 +10,7 @@ export function ProductCard({ product }: { product: Product }) {
         <CardContent className="p-0">
           <div className="aspect-square overflow-hidden">
             <Image
-              src={product.imageUrl || 'https://picsum.photos/seed/placeholder/600/600'}
+              src={(product.imageUrl || 'https://picsum.photos/seed/placeholder/600/600').trimEnd()}
               alt={product.name}
               width={600}
               height={600}

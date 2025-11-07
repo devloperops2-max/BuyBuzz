@@ -52,7 +52,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
     <div className="grid md:grid-cols-2 gap-8 lg:gap-16">
       <div className="aspect-square rounded-lg overflow-hidden border bg-card">
         <Image
-          src={product.imageUrl || "https://picsum.photos/seed/placeholder/800/800"}
+          src={(product.imageUrl || "https://picsum.photos/seed/placeholder/800/800").trimEnd()}
           alt={product.name}
           width={800}
           height={800}
