@@ -31,7 +31,7 @@ const PersonalizedProductRecommendationsInputSchema = z.object({
   availableProducts: z
     .string()
     .describe(
-      'A comma-separated list of available products in the store, with their names and IDs.'
+      'A comma-separated list of available products in the store, with their names, IDs, and prices in INR.'
     ),
 });
 export type PersonalizedProductRecommendationsInput = z.infer<
@@ -42,7 +42,7 @@ const PersonalizedProductRecommendationsOutputSchema = z.object({
   recommendedProducts: z
     .string()
     .describe(
-      'A conversational response with a list of product names that are recommended for the user. You must only recommend products from the available products list.'
+      'A conversational response with a list of product names and their prices that are recommended for the user. You must only recommend products from the available products list.'
     ),
 });
 export type PersonalizedProductRecommendationsOutput = z.infer<
@@ -64,14 +64,14 @@ const prompt = ai.definePrompt({
   Your task is to provide a helpful, conversational response that recommends products to the user based on their interests.
 
   CRITICAL: You MUST only recommend products from the following list of available products. Do not invent products.
-  Available Products:
+  Available Products (Name, Price):
   {{{availableProducts}}}
 
   User's request: "{{{userInterests}}}"
 
   Analyze the user's request and recommend 2-3 relevant products from the available list.
-  Present the recommendations in a friendly, conversational paragraph. Do not use a list format.
-  For example: "Based on your interest in X, I'd recommend taking a look at the Product A, which is great for... You might also like Product B because..."
+  Present the recommendations in a friendly, conversational paragraph. State the price of each recommended product clearly. Do not use a list format.
+  For example: "Based on your interest in X, I'd recommend taking a look at the Product A, which costs ₹1299 and is great for... You might also like Product B, priced at ₹899, because..."
   `,
 });
 

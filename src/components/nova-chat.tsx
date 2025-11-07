@@ -57,7 +57,7 @@ export function NovaChat() {
     setIsBotLoading(true);
 
     try {
-      const productList = products.map(p => `${p.name} (ID: ${p.id})`).join(', ');
+      const productList = products.map(p => `${p.name} (Price: ₹${p.price.toFixed(2)})`).join(', ');
 
       const recommendations = await getPersonalizedProductRecommendations({
         userInterests: userInput,
