@@ -4,14 +4,21 @@ import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { MessageSquare, Send, X, Bot } from "lucide-react";
+import { MessageSquare, Send, X, Bot, Loader } from "lucide-react";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { ScrollArea } from "./ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { getPersonalizedProductRecommendations } from "@/ai/flows/personalized-product-recommendations";
+
+type Message = {
+  sender: "bot" | "user";
+  text: string;
+}
 
 export function NovaChat() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([
+  const [isBotLoading, setIsBotLoading] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([
     {
       sender: "bot",
       text: "Hello! I'm Nova, your personal shopping assistant. How can I help you find the perfect item today?",
@@ -29,23 +36,44 @@ export function NovaChat() {
     }
   }, [messages]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (input.trim() === "") return;
 
-    const newMessages = [...messages, { sender: "user", text: input }];
+    const newMessages: Message[] = [...messages, { sender: "user", text: input }];
     setMessages(newMessages);
+    const userInput = input;
     setInput("");
+    setIsBotLoading(true);
 
-    // Mock bot response
-    setTimeout(() => {
+    try {
+      const recommendations = await getPersonalizedProductRecommendations({
+        userInterests: userInput,
+        browsingHistory: '',
+        purchaseHistory: ''
+      });
+      
+      const botResponse = `Based on your interest in "${userInput}", here are some recommendations: ${recommendations.recommendedProducts}`;
+      
       setMessages((prev) => [
         ...prev,
         {
           sender: "bot",
-          text: "I'm looking for products related to your query. One moment...",
+          text: botResponse,
         },
       ]);
-    }, 1000);
+
+    } catch (error) {
+      console.error("Error getting recommendations:", error);
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: "bot",
+          text: "I'm having a little trouble finding recommendations right now. Please try again in a moment.",
+        },
+      ]);
+    } finally {
+      setIsBotLoading(false);
+    }
   };
 
   return (
@@ -87,16 +115,27 @@ export function NovaChat() {
                         </Avatar>
                       )}
                       <div
-                        className={`max-w-[80%] rounded-lg px-3 py-2 ${
-                          msg.sender === "bot"
+                        className={cn(
+                          "max-w-[80%] rounded-lg px-3 py-2 text-sm",
+                           msg.sender === "bot"
                             ? "bg-muted"
                             : "bg-primary text-primary-foreground"
-                        }`}
+                        )}
                       >
-                        <p className="text-sm">{msg.text}</p>
+                        <p>{msg.text}</p>
                       </div>
                     </div>
                   ))}
+                   {isBotLoading && (
+                    <div className="flex items-end gap-2 justify-start">
+                      <Avatar className="h-8 w-8">
+                        <AvatarFallback className="bg-primary text-primary-foreground"><Bot /></AvatarFallback>
+                      </Avatar>
+                      <div className="max-w-[80%] rounded-lg px-3 py-2 bg-muted">
+                        <Loader className="h-5 w-5 animate-spin" />
+                      </div>
+                    </div>
+                  )}
                 </div>
               </ScrollArea>
             </CardContent>
@@ -106,8 +145,9 @@ export function NovaChat() {
                   placeholder="Ask for recommendations..."
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
+                  disabled={isBotLoading}
                 />
-                <Button type="submit" size="icon" disabled={!input.trim()}>
+                <Button type="submit" size="icon" disabled={!input.trim() || isBotLoading}>
                   <Send className="h-5 w-5" />
                 </Button>
               </form>
