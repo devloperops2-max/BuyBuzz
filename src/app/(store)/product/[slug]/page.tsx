@@ -7,7 +7,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Heart, Share2, ShoppingCart, Truck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { notFound, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 
 function ProductDetailSkeleton() {
@@ -47,7 +47,17 @@ export default function ProductDetailPage() {
   }
 
   if (!product) {
-    notFound();
+    return (
+        <div className="flex flex-col items-center justify-center text-center h-96">
+            <h1 className="text-2xl font-bold font-headline">Product Not Found</h1>
+            <p className="text-muted-foreground mt-2">
+                Sorry, we couldn't find the product you're looking for.
+            </p>
+            <Button asChild className="mt-6">
+                <a href="/dashboard">Back to Shop</a>
+            </Button>
+        </div>
+    );
   }
   
   const gstAmount = product.price * ((product.gstRate || 0) / 100);
