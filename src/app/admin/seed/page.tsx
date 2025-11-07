@@ -5,10 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { useFirestore, useUser } from '@/firebase';
-import { collection } from 'firebase/firestore';
+import { collection, doc, setDoc, writeBatch } from 'firebase/firestore';
 import { products } from '@/data/products';
-import { setDocumentNonBlocking } from '@/firebase/non-blocking-updates';
-import { doc } from 'firebase/firestore';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { LogIn } from 'lucide-react';
 import Link from 'next/link';
@@ -39,23 +37,26 @@ export default function SeedDatabasePage() {
 
     setIsSeeding(true);
     try {
-      const productsCollection = collection(firestore, 'products');
+      const batch = writeBatch(firestore);
+      const productsCollectionRef = collection(firestore, 'products');
       
       products.forEach(product => {
-        const productDocRef = doc(productsCollection, product.id);
-        setDocumentNonBlocking(productDocRef, product, {}); 
+        const productDocRef = doc(productsCollectionRef, product.id);
+        batch.set(productDocRef, product);
       });
 
+      await batch.commit();
+
       toast({
-        title: 'Database Seeding Initiated',
-        description: `Seeding of ${products.length} products has started in the background.`,
+        title: 'Database Seeding Successful',
+        description: `${products.length} products have been added to your database.`,
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error seeding database:', error);
       toast({
         variant: 'destructive',
         title: 'Seeding Failed',
-        description: 'Could not seed the database. Check the console for errors.',
+        description: error.message || 'Could not seed the database. Check the console for errors.',
       });
     } finally {
       setIsSeeding(false);
@@ -73,6 +74,14 @@ export default function SeedDatabasePage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {isUserLoading && (
+             <div className="flex items-center space-x-4 mb-6">
+                <div className="space-y-2">
+                  <div className="h-4 bg-muted rounded w-[250px] animate-pulse"></div>
+                  <div className="h-4 bg-muted rounded w-[200px] animate-pulse"></div>
+                </div>
+              </div>
+          )}
           {!isUserLoading && !user && (
             <Alert className="mb-6">
               <LogIn className="h-4 w-4" />
