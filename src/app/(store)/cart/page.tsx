@@ -76,6 +76,10 @@ export default function CartPage() {
     };
 
     const subtotal = cartItems?.reduce((acc, item) => acc + item.price * item.quantity, 0) || 0;
+    const gstRate = 0.12; // 12% GST
+    const gstAmount = subtotal * gstRate;
+    const total = subtotal + gstAmount;
+
 
     if (isLoading) {
         return <CartSkeleton />
@@ -137,10 +141,14 @@ export default function CartPage() {
                                 <span>Shipping & Handling</span>
                                 <span>Free</span>
                            </div>
+                            <div className="flex justify-between">
+                                <span>GST (12%)</span>
+                                <span>₹{gstAmount.toFixed(2)}</span>
+                           </div>
                            <Separator />
                            <div className="flex justify-between font-bold text-lg">
                                 <span>Total</span>
-                                <span>₹{subtotal.toFixed(2)}</span>
+                                <span>₹{total.toFixed(2)}</span>
                            </div>
                         </CardContent>
                         <CardFooter>
