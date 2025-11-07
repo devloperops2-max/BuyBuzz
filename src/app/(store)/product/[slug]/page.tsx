@@ -124,7 +124,7 @@ export default function ProductDetailPage() {
   }
   
   const gstAmount = product.price * ((product.gstRate || 0) / 100);
-  const shippingCost = product.price > 499 ? 0 : (product.shippingCost || 0);
+  const shippingCost = product.price > 499 ? 0 : product.price * 0.10;
   const totalAmount = product.price + gstAmount + shippingCost;
 
   return (
