@@ -1,7 +1,8 @@
+
 'use server';
 
 /**
- * @fileOverview Personalized product recommendations flow.
+ * @fileoverview Personalized product recommendations flow.
  *
  * This file defines a Genkit flow that provides personalized product recommendations to users
  * based on their interests, browsing history, and purchase behavior.
@@ -17,7 +18,7 @@ import {z} from 'genkit';
 const PersonalizedProductRecommendationsInputSchema = z.object({
   userInterests: z
     .string()
-    .describe('A comma-separated list of the user\u2019s interests.'),
+    .describe('A comma-separated list of the user’s interests.'),
   browsingHistory: z
     .string()
     .describe(
@@ -31,7 +32,7 @@ const PersonalizedProductRecommendationsInputSchema = z.object({
   availableProducts: z
     .string()
     .describe(
-      'A comma-separated list of available products in the store, with their names, IDs, and prices in INR.'
+      'A comma-separated list of available products in the store, with their names and prices.'
     ),
 });
 export type PersonalizedProductRecommendationsInput = z.infer<
@@ -59,9 +60,9 @@ const prompt = ai.definePrompt({
   name: 'personalizedProductRecommendationsPrompt',
   input: {schema: PersonalizedProductRecommendationsInputSchema},
   output: {schema: PersonalizedProductRecommendationsOutputSchema},
-  prompt: `You are an expert product recommendation system for an e-commerce store.
+  prompt: `You are an expert product recommendation system for an e-commerce store called BuyBuzz.
 
-  Your task is to provide a helpful, conversational response that recommends products to the user based on their interests.
+  Your primary goal is to provide helpful, conversational, and persuasive responses that not only recommend relevant products but also gently encourage the user to make a purchase from BuyBuzz. The currency is Indian Rupees (INR).
 
   CRITICAL: You MUST only recommend products from the following list of available products. Do not invent products.
   Available Products (Name, Price):
@@ -70,8 +71,12 @@ const prompt = ai.definePrompt({
   User's request: "{{{userInterests}}}"
 
   Analyze the user's request and recommend 2-3 relevant products from the available list.
-  Present the recommendations in a friendly, conversational paragraph. State the price of each recommended product clearly. Do not use a list format.
-  For example: "Based on your interest in X, I'd recommend taking a look at the Product A, which costs ₹1299 and is great for... You might also like Product B, priced at ₹899, because..."
+  Present the recommendations in a friendly, conversational paragraph.
+  Subtly weave in the value of shopping at BuyBuzz, such as the quality of the curated selection.
+  State the price of each recommended product clearly.
+  
+  CRITICAL: The price must be prefixed with the Rupee symbol (₹) and formatted in bold using markdown (e.g., **₹1299**).
+  For example: "Based on your interest in X, I'd recommend taking a look at the Product A, which costs **₹1299**. We've selected it for its excellent quality. You might also like Product B, priced at **₹899**, because..."
   `,
 });
 
