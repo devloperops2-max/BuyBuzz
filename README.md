@@ -2,7 +2,8 @@
 
 BuyBuzz is a feature-rich, modern e-commerce application built with Next.js and Firebase. It provides a complete shopping experience, from user authentication and product browsing to a seamless checkout process. The platform also includes a powerful admin dashboard for store management and leverages generative AI for an enhanced user and admin experience.
 
-![BuyBuzz Screenshot](https://images.unsplash.com/photo-1605774337664-7a846e9cdf17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxsaXZpbmclMjByb29tfGVufDB8fHx8MTc2MjQ2MDM4N3ww&ixlib=rb-4.1.0&q=80&w=1080)
+<img width="675" height="535" alt="image" src="https://github.com/user-attachments/assets/9779da2b-e08f-492e-82c2-ad60f2cee357" />
+
 
 ## Core Features
 
