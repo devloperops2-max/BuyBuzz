@@ -76,8 +76,10 @@ export default function AdminOrdersPage() {
   }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6 font-headline">Orders</h1>
+    <div className="space-y-6">
+       <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold font-headline">Orders</h1>
+      </div>
       <Card>
         <CardHeader>
           <CardTitle>All Customer Orders</CardTitle>
