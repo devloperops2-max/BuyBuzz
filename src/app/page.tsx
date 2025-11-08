@@ -8,7 +8,6 @@ import { ArrowRight } from 'lucide-react';
 import { LandingHeader } from '@/components/landing-header';
 import { Footer } from '@/components/footer';
 import { ProductCard } from '@/components/product-card';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, query, limit } from 'firebase/firestore';
 import type { Product } from '@/lib/types';
@@ -16,7 +15,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 function FeaturedProductsSkeleton() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
       {[...Array(4)].map((_, i) => (
         <div key={i} className="flex flex-col space-y-3 p-1">
           <Skeleton className="aspect-square rounded-lg" />
@@ -78,27 +77,15 @@ export default function Home() {
         <section className="py-16 md:py-24">
           <div className="container mx-auto px-4 md:px-6">
             <h2 className="text-3xl font-bold text-center font-headline">Featured Products</h2>
-            <div className="relative mt-12">
-              {isLoading ? <FeaturedProductsSkeleton /> : (
-                <Carousel
-                  opts={{
-                    align: "start",
-                    loop: true,
-                  }}
-                  className="w-full"
-                >
-                  <CarouselContent>
-                    {featuredProducts?.map((product) => (
-                      <CarouselItem key={product.id} className="md:basis-1/2 lg:basis-1/4">
-                         <div className="p-1">
-                          <ProductCard product={product} />
-                        </div>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                  <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4" />
-                  <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4" />
-                </Carousel>
+            <div className="mt-12">
+              {isLoading ? (
+                <FeaturedProductsSkeleton />
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+                  {featuredProducts?.map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))}
+                </div>
               )}
             </div>
             <div className="text-center mt-12">
