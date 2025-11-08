@@ -11,14 +11,24 @@ import { DollarSign, Package, Users, Activity } from "lucide-react";
 import { Line, LineChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { ChartContainer, ChartTooltipContent, type ChartConfig } from '@/components/ui/chart';
 
-const chartData = [
-  { month: 'Jan', revenue: 4000, profit: 2400 },
-  { month: 'Feb', revenue: 3000, profit: 1398 },
-  { month: 'Mar', revenue: 5000, profit: 3800 },
-  { month: 'Apr', revenue: 2780, profit: 1908 },
-  { month: 'May', revenue: 1890, profit: 800 },
-  { month: 'Jun', revenue: 2390, profit: 1500 },
-];
+const generateChartData = () => {
+  const data = [];
+  const today = new Date();
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+    const month = monthNames[d.getMonth()];
+    // Generate some random-but-realistic data
+    const revenue = Math.floor(Math.random() * (5000 - 1500 + 1)) + 1500;
+    const profit = Math.floor(revenue * (Math.random() * (0.7 - 0.4) + 0.4));
+    data.push({ month, revenue, profit });
+  }
+  return data;
+};
+
+const chartData = generateChartData();
+
 
 const chartConfig = {
   revenue: {
