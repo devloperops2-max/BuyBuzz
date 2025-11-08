@@ -10,7 +10,7 @@ import { SearchX } from 'lucide-react';
 
 function ProductSkeleton() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
       {[...Array(4)].map((_, i) => (
         <div key={i} className="flex flex-col space-y-3">
           <div className="relative aspect-square bg-muted rounded-lg animate-pulse"></div>
@@ -54,7 +54,7 @@ function SearchResults() {
         {areProductsLoading ? (
           <ProductSkeleton />
         ) : filteredProducts && filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
             {filteredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
