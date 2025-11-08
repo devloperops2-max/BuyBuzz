@@ -7,8 +7,9 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Minus, Plus, Trash2, ShoppingCart } from 'lucide-react';
+import { Minus, Plus, Trash2, ShoppingCart, Info } from 'lucide-react';
 import Link from 'next/link';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 type CartItemWithGST = CartItem & { gstRate?: number };
 
@@ -78,11 +79,9 @@ export default function CartPage() {
     };
 
     const subtotal = cartItems?.reduce((acc, item) => acc + item.price * item.quantity, 0) || 0;
-    const gstAmount = cartItems?.reduce((acc, item) => {
-        const itemGST = item.price * item.quantity * ((item.gstRate || 0) / 100);
-        return acc + itemGST;
-    }, 0) || 0;
-    const total = subtotal + gstAmount;
+    const gstAmount = subtotal * 0.18;
+    const shippingCost = subtotal > 499 ? 0 : 40;
+    const total = subtotal + gstAmount + shippingCost;
 
 
     if (isLoading) {
@@ -143,10 +142,10 @@ export default function CartPage() {
                            </div>
                            <div className="flex justify-between">
                                 <span>Shipping & Handling</span>
-                                <span>Free</span>
+                                <span>{shippingCost > 0 ? `₹${shippingCost.toFixed(2)}` : 'Free'}</span>
                            </div>
                             <div className="flex justify-between">
-                                <span>GST</span>
+                                <span>GST (18%)</span>
                                 <span>₹{gstAmount.toFixed(2)}</span>
                            </div>
                            <Separator />
@@ -155,7 +154,15 @@ export default function CartPage() {
                                 <span>₹{total.toFixed(2)}</span>
                            </div>
                         </CardContent>
-                        <CardFooter>
+                        <CardFooter className="flex flex-col gap-4">
+                            {shippingCost > 0 && (
+                                <Alert className="text-sm">
+                                    <Info className="h-4 w-4" />
+                                    <AlertDescription>
+                                        Free shipping on orders over ₹499.
+                                    </AlertDescription>
+                                </Alert>
+                            )}
                             <Button size="lg" className="w-full" asChild>
                                 <Link href="/checkout">Proceed to Checkout</Link>
                             </Button>

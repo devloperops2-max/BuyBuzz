@@ -34,10 +34,7 @@ export default function CheckoutPage() {
     const { data: cartItems, isLoading } = useCollection<CartItemWithGST>(cartRef);
 
     const subtotal = cartItems?.reduce((acc, item) => acc + item.price * item.quantity, 0) || 0;
-    const gstAmount = cartItems?.reduce((acc, item) => {
-        const itemGST = item.price * item.quantity * ((item.gstRate || 0) / 100);
-        return acc + itemGST;
-    }, 0) || 0;
+    const gstAmount = subtotal * 0.18;
     const shippingCost = subtotal > 499 ? 0 : 40;
     const total = subtotal + gstAmount + shippingCost;
 
@@ -71,7 +68,7 @@ export default function CheckoutPage() {
                     itemPrice: item.price,
                     name: item.name,
                     imageUrl: (item.imageUrl || '').trimEnd(),
-                    gstRate: item.gstRate || 0,
+                    gstRate: 18,
                 }))
             };
             batch.set(orderRef, newOrder);
@@ -214,7 +211,7 @@ export default function CheckoutPage() {
                                 <span>{shippingCost > 0 ? `₹${shippingCost.toFixed(2)}` : 'Free'}</span>
                            </div>
                             <div className="flex justify-between text-sm">
-                                <span>GST</span>
+                                <span>GST (18%)</span>
                                 <span>₹{gstAmount.toFixed(2)}</span>
                            </div>
                            <Separator />
