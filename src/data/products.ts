@@ -43,7 +43,7 @@ export const products: Product[] = [
     "imageUrl": "https://images.unsplash.com/photo-1619119069152-a2b331eb392a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxsZWF0aGVyJTIwd2FsbGV0fGVufDB8fHx8MTc2MzU5OTExMXww&ixlib=rb-4.1.0&q=80&w=1080",
     "imageHint": "leather wallet",
     "shippingCost": 0,
-    "gstRate": 12
+    "gstRate": 18
   },
   {
     "id": "5",
@@ -54,7 +54,7 @@ export const products: Product[] = [
     "imageUrl": "https://images.unsplash.com/photo-1594223274512-ad4803739b7c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0b3RlJTIwYmFnfGVufDB8fHx8MTc2MzU5OTEzNXww&ixlib=rb-4.1.0&q=80&w=1080",
     "imageHint": "tote bag",
     "shippingCost": 0,
-    "gstRate": 5
+    "gstRate": 18
   },
   {
     "id": "6",
@@ -65,7 +65,7 @@ export const products: Product[] = [
     "imageUrl": "https://images.unsplash.com/photo-1602143407151-247e066d2d12?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzdGFpbmxlc3MlMjBzdGVlbCUyMHdhdGVyJTIwYm90dGxlfGVufDB8fHx8MTc2MzU5OTE5NHww&ixlib=rb-4.1.0&q=80&w=1080",
     "imageHint": "water bottle",
     "shippingCost": 40,
-    "gstRate": 12
+    "gstRate": 18
   },
   {
     "id": "7",
@@ -76,7 +76,7 @@ export const products: Product[] = [
     "imageUrl": "https://images.unsplash.com/photo-1583777575994-32902b4d6e96?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb29rd2FyZSUyMHNldHxlbnwwfHx8fDE3NjMzMDUzODd8MA&ixlib=rb-4.1.0&q=80&w=1080",
     "imageHint": "cookware set",
     "shippingCost": 200,
-    "gstRate": 12
+    "gstRate": 18
   },
   {
     "id": "8",
@@ -87,7 +87,7 @@ export const products: Product[] = [
     "imageUrl": "https://images.unsplash.com/photo-1627435601361-ec25f2b74c20?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxncmVlbiUyMHRlYXxlbnwwfHx8fDE3NjMzMDU0MTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
     "imageHint": "green tea",
     "shippingCost": 40,
-    "gstRate": 5
+    "gstRate": 18
   },
   {
     "id": "9",
@@ -98,7 +98,7 @@ export const products: Product[] = [
     "imageUrl": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxib29rfGVufDB8fHx8MTc2MzU5OTI0Mnww&ixlib=rb-4.1.0&q=80&w=1080",
     "imageHint": "book cover",
     "shippingCost": 40,
-    "gstRate": 0
+    "gstRate": 18
   },
   {
     "id": "10",
@@ -109,7 +109,7 @@ export const products: Product[] = [
     "imageUrl": "https://images.unsplash.com/photo-1591291621216-9dff4308588e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx5b2dhJTIwbWF0fGVufDB8fHx8MTc2MzU5OTMwNnww&ixlib=rb-4.1.0&q=80&w=1080",
     "imageHint": "yoga mat",
     "shippingCost": 80,
-    "gstRate": 12
+    "gstRate": 18
   },
   {
     "id": "11",
@@ -142,7 +142,7 @@ export const products: Product[] = [
     "imageUrl": "https://images.unsplash.com/photo-1598327105666-5b8764a59121?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzbWFydHBob25lfGVufDB8fHx8MTc2MjUxMTM0NHww&ixlibrb-4.1.0&q=80&w=1080",
     "imageHint": "smartphone",
     "shippingCost": 0,
-    "gstRate": 12
+    "gstRate": 18
   },
   {
     "id": "14",
@@ -175,6 +175,6 @@ export const products: Product[] = [
     "imageUrl": "https://images.unsplash.com/photo-1523206489230-c012c64b2b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzbWFydHBob25lfGVufDB8fHx8MTc2MjUxMTM0NHww&ixlib-rb-4.1.0&q=80&w=1080",
     "imageHint": "smartphone device",
     "shippingCost": 0,
-    "gstRate": 12
+    "gstRate": 18
   }
 ];
