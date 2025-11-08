@@ -115,12 +115,12 @@ service cloud.firestore {
             return isOwner(userId) && resource != null;
         }
 
-        allow get: if isOwner(userId);
-        allow list: if isOwner(userId);
+        allow get: if isOwner(userId) || isAdmin();
+        allow list: if isOwner(userId) || isAdmin();
 
         allow create: if isOwner(userId);
-        allow update: if isExistingOwner(userId);
-        allow delete: if isExistingOwner(userId);
+        allow update: if isExistingOwner(userId) || isAdmin();
+        allow delete: if isExistingOwner(userId) || isAdmin();
     }
 
     /**
@@ -175,10 +175,8 @@ service cloud.firestore {
         allow delete: if isExistingOwner(userId);
     }
 
-    match /{path=**}/orders/{orderId} {
+    match /orders/{orderId} {
       allow read, write: if isAdmin();
     }
   }
 }
-
-    
