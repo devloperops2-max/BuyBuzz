@@ -1,23 +1,9 @@
-
-/**
- * @file Firestore Security Rules for Nova Emporium.
- *
- * @core_philosophy This ruleset enforces a strict user-ownership model for user profiles and orders,
- * while allowing public read access to product information and admin access to all data.
- *
- * @key_security_decisions
- *   - Users can only read and write their own profile, cart, and order data.
- *   - Products are publicly readable. Any authenticated user can write to seed data.
- *   - Admins (identified by a specific email) have elevated privileges to read all user data and manage all orders.
- *   - Collection group queries for 'orders' are specifically allowed for admins.
- */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // =========== Functions ===========
+    // =========== Helper Functions ===========
     function isAdmin() {
-      // Check for the admin's email. No need to check for email_verified for this app.
       return request.auth != null && request.auth.token.email == 'admin@example.com';
     }
 
@@ -25,24 +11,7 @@ service cloud.firestore {
       return request.auth != null && request.auth.uid == userId;
     }
 
-    // =========== Collection Group Rules (Admin) ===========
-    /**
-     * @description Controls admin access to the 'orders' collection group.
-     * @path /orders/{orderId}
-     * @allow The admin can list and update any order in the system for management.
-     * @principle Grants broad admin privileges for order management.
-     */
-    match /{path=**}/orders/{orderId} {
-       allow read, update: if isAdmin();
-    }
-
-
     // =========== User Data ===========
-    /**
-     * @description Controls access to user profile and nested data.
-     * @path /users/{userId}
-     * @principle Enforces document ownership for all user-specific data. Admin has read-only override.
-     */
     match /users/{userId} {
       allow get: if isOwner(userId) || isAdmin();
       allow list: if isAdmin();
@@ -50,40 +19,33 @@ service cloud.firestore {
       allow update, delete: if isOwner(userId);
 
       // --- Nested User Collections ---
-
-      /**
-       * @description Controls access to a user's shopping cart.
-       */
       match /cart/{productId} {
         allow read, write: if isOwner(userId);
       }
 
-      /**
-       * @description Controls access to a user's orders and their nested items/statuses.
-       */
       match /orders/{orderId} {
         allow read, write: if isOwner(userId) || isAdmin();
 
         match /orderItems/{orderItemId} {
-           allow read, write: if isOwner(userId) || isAdmin();
+          allow read, write: if isOwner(userId) || isAdmin();
         }
 
         match /orderStatuses/{orderStatusId} {
-           allow read, write: if isOwner(userId) || isAdmin();
+          allow read, write: if isOwner(userId) || isAdmin();
         }
       }
     }
 
-
     // =========== Public Collections ===========
-    /**
-     * @description Controls access to product information.
-     * @path /products/{productId}
-     * @principle Allows public read access and authenticated write for seeding.
-     */
     match /products/{productId} {
-      allow read: if true;
-      allow write: if request.auth != null; // Allow any authenticated user to seed/edit products.
+      allow read: if true; // anyone can read products
+      allow write: if request.auth != null; // only authenticated users can write
+    }
+
+    // =========== Admin Global Access ===========
+    // Allows admin to read/write/list across all data (except the root collection list)
+    match /{document=**} {
+      allow read, write, list: if isAdmin();
     }
   }
 }
