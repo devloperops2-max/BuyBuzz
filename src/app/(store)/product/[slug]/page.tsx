@@ -73,7 +73,8 @@ export default function ProductDetailPage() {
             name: product.name,
             price: product.price,
             imageUrl: product.imageUrl || '',
-            imageHint: product.imageHint || ''
+            imageHint: product.imageHint || '',
+            gstRate: product.gstRate || 0,
         };
 
         setDoc(cartItemRef, cartItemData, { merge: true })

@@ -18,6 +18,7 @@ export type CartItem = {
     price: number;
     imageUrl?: string;
     imageHint?: string;
+    gstRate?: number;
 };
 
 export type OrderItem = {
@@ -27,6 +28,7 @@ export type OrderItem = {
   itemPrice: number;
   name: string;
   imageUrl?: string;
+  gstRate?: number;
 };
 
 export type Order = {

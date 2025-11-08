@@ -15,6 +15,8 @@ import { CreditCard, Landmark, Loader2, Wallet } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 
+type CartItemWithGST = CartItem & { gstRate?: number };
+
 export default function CheckoutPage() {
     const { user } = useUser();
     const firestore = useFirestore();
@@ -29,11 +31,13 @@ export default function CheckoutPage() {
         return collection(firestore, 'users', user.uid, 'cart');
     }, [user, firestore]);
 
-    const { data: cartItems, isLoading } = useCollection<CartItem>(cartRef);
+    const { data: cartItems, isLoading } = useCollection<CartItemWithGST>(cartRef);
 
     const subtotal = cartItems?.reduce((acc, item) => acc + item.price * item.quantity, 0) || 0;
-    const gstRate = 0.12; // 12% GST
-    const gstAmount = subtotal * gstRate;
+    const gstAmount = cartItems?.reduce((acc, item) => {
+        const itemGST = item.price * item.quantity * ((item.gstRate || 0) / 100);
+        return acc + itemGST;
+    }, 0) || 0;
     const shippingCost = subtotal > 499 ? 0 : 40;
     const total = subtotal + gstAmount + shippingCost;
 
@@ -67,6 +71,7 @@ export default function CheckoutPage() {
                     itemPrice: item.price,
                     name: item.name,
                     imageUrl: (item.imageUrl || '').trimEnd(),
+                    gstRate: item.gstRate || 0,
                 }))
             };
             batch.set(orderRef, newOrder);
@@ -209,7 +214,7 @@ export default function CheckoutPage() {
                                 <span>{shippingCost > 0 ? `₹${shippingCost.toFixed(2)}` : 'Free'}</span>
                            </div>
                             <div className="flex justify-between text-sm">
-                                <span>GST (12%)</span>
+                                <span>GST</span>
                                 <span>₹{gstAmount.toFixed(2)}</span>
                            </div>
                            <Separator />

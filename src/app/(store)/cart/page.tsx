@@ -2,13 +2,15 @@
 
 import { useCollection, useFirestore, useUser, useMemoFirebase } from '@/firebase';
 import { collection, doc, updateDoc, deleteDoc } from 'firebase/firestore';
-import type { CartItem } from '@/lib/types';
+import type { CartItem, Product } from '@/lib/types';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Minus, Plus, Trash2, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
+
+type CartItemWithGST = CartItem & { gstRate?: number };
 
 function CartSkeleton() {
     return (
@@ -63,7 +65,7 @@ export default function CartPage() {
         return collection(firestore, 'users', user.uid, 'cart');
     }, [user, firestore]);
 
-    const { data: cartItems, isLoading } = useCollection<CartItem>(cartRef);
+    const { data: cartItems, isLoading } = useCollection<CartItemWithGST>(cartRef);
 
     const handleQuantityChange = async (productId: string, newQuantity: number) => {
         if (!user || !firestore) return;
@@ -76,8 +78,10 @@ export default function CartPage() {
     };
 
     const subtotal = cartItems?.reduce((acc, item) => acc + item.price * item.quantity, 0) || 0;
-    const gstRate = 0.12; // 12% GST
-    const gstAmount = subtotal * gstRate;
+    const gstAmount = cartItems?.reduce((acc, item) => {
+        const itemGST = item.price * item.quantity * ((item.gstRate || 0) / 100);
+        return acc + itemGST;
+    }, 0) || 0;
     const total = subtotal + gstAmount;
 
 
@@ -142,7 +146,7 @@ export default function CartPage() {
                                 <span>Free</span>
                            </div>
                             <div className="flex justify-between">
-                                <span>GST (12%)</span>
+                                <span>GST</span>
                                 <span>₹{gstAmount.toFixed(2)}</span>
                            </div>
                            <Separator />
