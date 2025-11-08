@@ -17,11 +17,12 @@ service cloud.firestore {
 
     // =========== Functions ===========
     function isAdmin() {
-      return request.auth.token.email == 'admin@example.com';
+      // Check for the admin's email. No need to check for email_verified for this app.
+      return request.auth != null && request.auth.token.email == 'admin@example.com';
     }
 
     function isOwner(userId) {
-      return request.auth.uid == userId;
+      return request.auth != null && request.auth.uid == userId;
     }
 
     // =========== Collection Group Rules (Admin) ===========
@@ -44,7 +45,7 @@ service cloud.firestore {
      */
     match /users/{userId} {
       allow get: if isOwner(userId) || isAdmin();
-      allow list: if isAdmin(); // Prevent non-admins from listing all users.
+      allow list: if isAdmin();
       allow create: if isOwner(userId);
       allow update, delete: if isOwner(userId);
 
