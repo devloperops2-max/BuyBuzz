@@ -87,14 +87,14 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
       </div>
-      <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="mt-6 grid grid-cols-1 gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Revenue vs. Profit</CardTitle>
             <CardDescription>Last 6 months performance.</CardDescription>
           </CardHeader>
           <CardContent>
-            <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+            <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
               <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" />
@@ -104,15 +104,6 @@ export default function AdminDashboard() {
                 <Line type="monotone" dataKey="profit" stroke="var(--color-profit)" strokeWidth={2} name="Profit"/>
               </LineChart>
             </ChartContainer>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Orders</CardTitle>
-            <CardDescription>A list of the most recent orders.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">No recent orders to display.</p>
           </CardContent>
         </Card>
       </div>
