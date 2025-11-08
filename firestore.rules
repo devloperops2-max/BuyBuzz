@@ -174,9 +174,15 @@ service cloud.firestore {
         allow update: if isExistingOwner(userId);
         allow delete: if isExistingOwner(userId);
     }
-
-    match /orders/{orderId} {
-      allow read, write: if isAdmin();
+    
+    /**
+     * @description Controls admin access to the 'orders' collection group.
+     * @path /orders/{orderId}
+     * @allow The admin can list and update any order in the system.
+     * @principle Grants broad admin privileges for order management.
+     */
+    match /{path=**}/orders/{orderId} {
+       allow read, update: if isAdmin();
     }
   }
 }
