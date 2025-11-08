@@ -124,7 +124,7 @@ export default function ProductDetailPage() {
   }
   
   const gstAmount = product.price * ((product.gstRate || 0) / 100);
-  const shippingCost = product.price > 499 ? 0 : product.price * 0.10;
+  const shippingCost = product.shippingCost || (product.price > 499 ? 0 : 40);
   const totalAmount = product.price + gstAmount + shippingCost;
 
   return (
@@ -155,7 +155,7 @@ export default function ProductDetailPage() {
                 <span className="text-muted-foreground">Price</span>
                 <span className="font-medium">₹{product.price.toFixed(2)}</span>
             </div>
-            {product.gstRate && gstAmount > 0 && (
+            {product.gstRate != null && product.gstRate > 0 && (
                  <div className="flex justify-between items-center">
                     <span className="text-muted-foreground">GST ({product.gstRate}%)</span>
                     <span className="font-medium">₹{gstAmount.toFixed(2)}</span>

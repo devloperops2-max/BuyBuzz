@@ -54,7 +54,7 @@ export const products: Product[] = [
     "imageUrl": "https://images.unsplash.com/photo-1594223274512-ad4803739b7c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0b3RlJTIwYmFnfGVufDB8fHx8MTc2MzU5OTEzNXww&ixlib=rb-4.1.0&q=80&w=1080",
     "imageHint": "tote bag",
     "shippingCost": 0,
-    "gstRate": 12
+    "gstRate": 5
   },
   {
     "id": "6",
@@ -142,7 +142,7 @@ export const products: Product[] = [
     "imageUrl": "https://images.unsplash.com/photo-1598327105666-5b8764a59121?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzbWFydHBob25lfGVufDB8fHx8MTc2MjUxMTM0NHww&ixlibrb-4.1.0&q=80&w=1080",
     "imageHint": "smartphone",
     "shippingCost": 0,
-    "gstRate": 18
+    "gstRate": 12
   },
   {
     "id": "14",
@@ -175,6 +175,6 @@ export const products: Product[] = [
     "imageUrl": "https://images.unsplash.com/photo-1523206489230-c012c64b2b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzbWFydHBob25lfGVufDB8fHx8MTc2MjUxMTM0NHww&ixlib-rb-4.1.0&q=80&w=1080",
     "imageHint": "smartphone device",
     "shippingCost": 0,
-    "gstRate": 18
+    "gstRate": 12
   }
 ];
