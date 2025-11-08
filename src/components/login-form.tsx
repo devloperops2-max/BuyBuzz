@@ -41,9 +41,13 @@ export function LoginForm() {
       const firebaseError = error as FirebaseError;
       console.error('Login Error:', firebaseError);
       let description = 'An unexpected error occurred. Please try again.';
+      
+      // Broader check for invalid login credentials
       if (
         firebaseError.code === 'auth/invalid-credential' ||
-        firebaseError.code === 'auth/invalid-login-credentials'
+        firebaseError.code === 'auth/invalid-login-credentials' ||
+        firebaseError.code === 'auth/wrong-password' ||
+        firebaseError.code === 'auth/user-not-found'
       ) {
         description = 'Invalid email or password.';
       } else if (firebaseError.message) {
