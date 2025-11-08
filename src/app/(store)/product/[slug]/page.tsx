@@ -2,7 +2,7 @@
 
 import { useDoc, useFirestore, useMemoFirebase, useUser } from "@/firebase";
 import type { Product } from "@/lib/types";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, runTransaction } from "firebase/firestore";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Heart, Share2, ShoppingCart, Truck } from "lucide-react";
@@ -63,35 +63,28 @@ export default function ProductDetailPage() {
     const cartItemRef = doc(firestore, 'users', user.uid, 'cart', product.id);
 
     try {
-        const docSnap = await getDoc(cartItemRef);
-        const currentQuantity = docSnap.exists() ? docSnap.data().quantity : 0;
-        
-        const cartItemData = {
-            productId: product.id,
-            quantity: currentQuantity + 1,
-            // Denormalize product data for easier access in the cart
-            name: product.name,
-            price: product.price,
-            imageUrl: product.imageUrl || '',
-            imageHint: product.imageHint || '',
-            gstRate: product.gstRate || 0,
-        };
+        // Use a transaction to safely read and write the quantity
+        await runTransaction(firestore, async (transaction) => {
+            const docSnap = await transaction.get(cartItemRef);
+            const currentQuantity = docSnap.exists() ? docSnap.data().quantity : 0;
+            
+            const cartItemData = {
+                productId: product.id,
+                quantity: currentQuantity + 1,
+                name: product.name,
+                price: product.price,
+                imageUrl: product.imageUrl || '',
+                imageHint: product.imageHint || '',
+                gstRate: product.gstRate || 0,
+            };
+            
+            transaction.set(cartItemRef, cartItemData, { merge: true });
+        });
 
-        setDoc(cartItemRef, cartItemData, { merge: true })
-            .then(() => {
-                 toast({
-                    title: "Added to Cart!",
-                    description: `${product.name} has been added to your cart.`,
-                });
-            })
-            .catch(serverError => {
-                 const permissionError = new FirestorePermissionError({
-                    path: cartItemRef.path,
-                    operation: 'create',
-                    requestResourceData: cartItemData,
-                });
-                errorEmitter.emit('permission-error', permissionError);
-            });
+        toast({
+            title: "Added to Cart!",
+            description: `${product.name} has been added to your cart.`,
+        });
 
     } catch (error) {
         console.error("Error adding to cart:", error);
@@ -100,6 +93,8 @@ export default function ProductDetailPage() {
             title: "Something went wrong",
             description: "Could not add item to cart. Please try again.",
         });
+        // Note: The permission error emitter is harder to implement inside a transaction
+        // as the final data isn't known. For this case, we rely on the generic error.
     } finally {
         setIsAddingToCart(false);
     }
