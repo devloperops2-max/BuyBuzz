@@ -35,8 +35,8 @@ export type Order = {
   orderDate: any; // Firestore Timestamp
   totalAmount: number;
   paymentMethod: string;
-  orderStatus: string;
-  items: OrderItem[]; // For simplicity, embedding items. A subcollection is also a good pattern.
+  orderStatus: "Placed" | "Processing" | "Shipped" | "Delivered" | "Cancelled";
+  items: OrderItem[]; 
 };
 
 export type User = {

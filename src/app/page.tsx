@@ -7,10 +7,11 @@ import { ArrowRight } from 'lucide-react';
 import { LandingHeader } from '@/components/landing-header';
 import { Footer } from '@/components/footer';
 import { ProductCard } from '@/components/product-card';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find(img => img.id === 'hero-1');
-  const featuredProducts = products.slice(0, 4);
+  const featuredProducts = products.slice(0, 8);
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -48,10 +49,26 @@ export default function Home() {
         <section className="py-16 md:py-24">
           <div className="container mx-auto px-4 md:px-6">
             <h2 className="text-3xl font-bold text-center font-headline">Featured Products</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
-              {featuredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
+            <div className="relative mt-12">
+              <Carousel
+                opts={{
+                  align: "start",
+                  loop: true,
+                }}
+                className="w-full"
+              >
+                <CarouselContent>
+                  {featuredProducts.map((product) => (
+                    <CarouselItem key={product.id} className="md:basis-1/2 lg:basis-1/4">
+                       <div className="p-1">
+                        <ProductCard product={product} />
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4" />
+                <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4" />
+              </Carousel>
             </div>
             <div className="text-center mt-12">
               <Button variant="outline" asChild>

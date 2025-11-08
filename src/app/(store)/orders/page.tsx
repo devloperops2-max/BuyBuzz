@@ -1,11 +1,10 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useCollection, useFirestore, useUser, useMemoFirebase } from "@/firebase";
 import { collection, query, orderBy } from "firebase/firestore";
 import type { Order } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { format } from 'date-fns';
 
@@ -20,7 +19,7 @@ function OrderHistorySkeleton() {
                         <div className="h-5 bg-muted rounded w-1/3"></div>
                         <div className="h-5 bg-muted rounded w-1/4"></div>
                     </CardHeader>
-                    <CardContent className="space-y-4">
+                    <CardContent className="space-y-4 pt-6">
                         <div className="flex items-center gap-4">
                             <div className="w-16 h-16 bg-muted rounded-md"></div>
                             <div className="flex-grow space-y-2">
@@ -49,11 +48,20 @@ export default function UserOrdersPage() {
 
     const formatDate = (timestamp: any) => {
         if (!timestamp) return 'N/A';
-        // Firestore timestamps can be either objects with seconds/nanoseconds or null
-        // on the client before they are fully resolved. Handle this.
         const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp.seconds * 1000);
         return format(date, 'MMMM d, yyyy');
     }
+
+     const getStatusVariant = (status: string): "default" | "secondary" | "destructive" | "outline" => {
+        switch (status) {
+            case "Placed": return "default";
+            case "Processing": return "secondary";
+            case "Shipped": return "outline";
+            case "Delivered": return "secondary";
+            case "Cancelled": return "destructive";
+            default: return "default";
+        }
+    };
 
     return (
         <div>
@@ -68,7 +76,7 @@ export default function UserOrdersPage() {
                             A list of all your past orders.
                         </CardDescription>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="pt-6">
                         <p className="text-muted-foreground">You have no orders yet.</p>
                     </CardContent>
                 </Card>
@@ -89,7 +97,7 @@ export default function UserOrdersPage() {
                                 </div>
                                  <div>
                                     <p className="font-semibold">Status</p>
-                                    <Badge variant={order.orderStatus === 'Placed' ? 'default' : 'secondary'}>{order.orderStatus}</Badge>
+                                    <Badge variant={getStatusVariant(order.orderStatus)}>{order.orderStatus}</Badge>
                                 </div>
                                 <div>
                                     <p className="font-semibold">Order ID</p>
