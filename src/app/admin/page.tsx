@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { DollarSign, Package, Users, Activity } from "lucide-react";
 import { Line, LineChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { ChartTooltipContent } from '@/components/ui/chart';
+import { ChartContainer, ChartTooltipContent, type ChartConfig } from '@/components/ui/chart';
 
 const chartData = [
   { month: 'Jan', revenue: 4000, profit: 2400 },
@@ -19,6 +19,17 @@ const chartData = [
   { month: 'May', revenue: 1890, profit: 800 },
   { month: 'Jun', revenue: 2390, profit: 1500 },
 ];
+
+const chartConfig = {
+  revenue: {
+    label: "Revenue",
+    color: "hsl(var(--chart-1))",
+  },
+  profit: {
+    label: "Profit",
+    color: "hsl(var(--chart-2))",
+  },
+} satisfies ChartConfig;
 
 export default function AdminDashboard() {
   return (
@@ -73,16 +84,16 @@ export default function AdminDashboard() {
             <CardDescription>Last 6 months performance.</CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
               <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" />
                 <YAxis />
                 <Tooltip content={<ChartTooltipContent />} />
-                <Line type="monotone" dataKey="revenue" stroke="hsl(var(--primary))" strokeWidth={2} name="Revenue"/>
-                <Line type="monotone" dataKey="profit" stroke="hsl(var(--chart-2))" strokeWidth={2} name="Profit"/>
+                <Line type="monotone" dataKey="revenue" stroke="var(--color-revenue)" strokeWidth={2} name="Revenue"/>
+                <Line type="monotone" dataKey="profit" stroke="var(--color-profit)" strokeWidth={2} name="Profit"/>
               </LineChart>
-            </ResponsiveContainer>
+            </ChartContainer>
           </CardContent>
         </Card>
         <Card>
