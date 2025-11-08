@@ -17,7 +17,7 @@
  *   - Products are publicly readable.
  *   - Any user can write to the products collection to allow for seeding.
  *   - Users can only read and write their own order data.
- *   - Listing all users is disallowed.
+ *   - Listing all users is disallowed, except for the admin user.
  *
  * @denormalization_for_authorization  The data structure avoids the need for `get()` calls in the security rules.  Specifically,
  * order data is nested under the user's ID, allowing rules to easily verify the user's ownership of the order using path-based
@@ -30,6 +30,10 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    function isAdmin() {
+      return request.auth.token.email == 'admin@example.com';
+    }
+
     /**
      * @description Controls access to user profile information.
      * @path /users/{userId}
@@ -37,7 +41,7 @@ service cloud.firestore {
      *   Request: `auth.uid == 'user123'`, `resource.data.id == 'user123'` (on create/update).
      * @deny (create, update, get, list) User with ID 'user456' cannot access user 'user123' profile.
      *   Request: `auth.uid == 'user456'` trying to access `/users/user123`.
-     * @principle Enforces document ownership for user profiles.
+     * @principle Enforces document ownership for user profiles. Admin can list all users.
      */
     match /users/{userId} {
       function isOwner(userId) {
@@ -48,12 +52,12 @@ service cloud.firestore {
           return isOwner(userId) && resource != null;
       }
 
-      allow get: if isOwner(userId);
-      allow list: if false; // Prevent listing all users
+      allow get: if isOwner(userId) || isAdmin();
+      allow list: if isAdmin(); // Prevent listing all users, except for admin
 
       allow create: if isOwner(userId);
-      allow update: if isExistingOwner(userId);
-      allow delete: if isExistingOwner(userId);
+      allow update: if isExistingOwner(userId) || isAdmin();
+      allow delete: if isExistingOwner(userId) || isAdmin();
     }
 
     /**
@@ -170,5 +174,11 @@ service cloud.firestore {
         allow update: if isExistingOwner(userId);
         allow delete: if isExistingOwner(userId);
     }
+
+    match /{path=**}/orders/{orderId} {
+      allow read, write: if isAdmin();
+    }
   }
 }
+
+    
