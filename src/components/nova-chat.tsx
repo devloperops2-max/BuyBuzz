@@ -18,10 +18,12 @@ type Message = {
   text: string;
 }
 
-const GREETING_DELAY = 30000; // 30 seconds
+const INITIAL_GREETING_DELAY = 30000; // 30 seconds
+const REAPPEAR_DELAY = 120000; // 2 minutes
 
 export function NovaChat() {
   const [isOpen, setIsOpen] = useState(false);
+  const [hasBeenOpened, setHasBeenOpened] = useState(false);
   const [isBotLoading, setIsBotLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -40,14 +42,16 @@ export function NovaChat() {
   const { data: products } = useCollection<Product>(productsQuery);
 
   useEffect(() => {
+    const delay = hasBeenOpened ? REAPPEAR_DELAY : INITIAL_GREETING_DELAY;
+    
     const timer = setTimeout(() => {
       if (!isOpen) {
         setIsOpen(true);
       }
-    }, GREETING_DELAY);
+    }, delay);
 
     return () => clearTimeout(timer);
-  }, [isOpen]);
+  }, [isOpen, hasBeenOpened]);
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -101,6 +105,13 @@ export function NovaChat() {
     }
   };
 
+  const handleClose = () => {
+    setIsOpen(false);
+    if (!hasBeenOpened) {
+        setHasBeenOpened(true);
+    }
+  }
+
   return (
     <>
       <div className="fixed bottom-6 right-6 z-50">
@@ -120,7 +131,7 @@ export function NovaChat() {
                 </Avatar>
                 <CardTitle className="text-lg font-headline">Nova</CardTitle>
               </div>
-              <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
+              <Button variant="ghost" size="icon" onClick={handleClose}>
                 <X className="h-5 w-5" />
               </Button>
             </CardHeader>
